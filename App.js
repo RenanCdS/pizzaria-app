@@ -1,20 +1,31 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { useEffect } from 'react';
+import {createTables} from './services/DbService';
+import HomeScreen from './Screens/HomeScreen/Index';
+import ProductCreationScreen from './Screens/ProductCreationScreen/Index';
+
+const Stack = createNativeStackNavigator();
 
 export default function App() {
+  useEffect(() => {
+    createTables();-
+    console.log('Successfully created database!');
+  }, []);
+  
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <NavigationContainer>
+      <Stack.Navigator>
+        {/* <Stack.Screen 
+          name="Home"
+          component={HomeScreen}
+          options={{title: 'Bem vindo!'}} /> */}
+
+        <Stack.Screen 
+          name="ProductCreation"
+          component={ProductCreationScreen}
+          options={{title: 'Registro de produto'}} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
