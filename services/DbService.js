@@ -7,11 +7,19 @@ export function getDbConnection() {
 
 export function createTables() {
     return new Promise((resolve, reject) => {
+        const queryCategoryTable = `CREATE TABLE IF NOT EXISTS TB_CATEGORY
+        (
+            CATEGORY_ID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+            DESCRIPTION TEXT NOT NULL
+        ); `;
+        
         const queryProductTable = `CREATE TABLE IF NOT EXISTS TB_PRODUCT
         (
             PRODUCT_ID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
             DESCRIPTION TEXT NOT NULL,
-            PRICE TEXT NOT NULL
+            CATEGORY_ID INTEGER NOT NULL,
+            PRICE TEXT NOT NULL,
+            FOREIGN KEY(CATEGORY_ID) REFERENCES TB_CATEGORY(CATEGORY_ID)
         ); `;
 
         const queryOrderTable = `CREATE TABLE IF NOT EXISTS TB_ORDER
@@ -23,7 +31,7 @@ export function createTables() {
 
         const queryOrderProductTable = `CREATE TABLE IF NOT EXISTS TB_ORDER_PRODUCT
         (
-            ORDER_PRODUCT_ID TEXT NOT NULL PRIMARY KEY AUTOINCREMENT,
+            ORDER_PRODUCT_ID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
             QUANTITY INTEGER NOT NULL,
             PRODUCT_ID INTEGER NOT NULL,
             ORDER_ID INTEGER NOT NULL,
@@ -31,14 +39,14 @@ export function createTables() {
             FOREIGN KEY(ORDER_ID) REFERENCES TB_ORDER(ORDER_ID)
         ); `;
 
-        const fullDatabaseCreationQuery = queryProductTable + queryOrderTable 
+        const fullDatabaseCreationQuery = queryCategoryTable + queryProductTable + queryOrderTable 
                                          + queryOrderProductTable;
 
         const dbConnection = getDbConnection();
 
         dbConnection.transaction(transaction => {
             transaction.executeSql(fullDatabaseCreationQuery, [],
-                (_) => resolve(true))
+                (_) => { resolve(true) })
         }, error => {
             console.log(error);
             resolve(false);

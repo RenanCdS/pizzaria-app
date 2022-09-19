@@ -1,55 +1,96 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
     View,
-    Text,
-    TextInput,
-    Button,
     Alert
 } from 'react-native';
-import styles from '../../styles';
-import { createProduct, getProducts } from '../../services/ProductService';
+import { createProduct } from '../../services/ProductService';
+import { getCategories } from '../../services/CategoryService';
+import { 
+        Button,
+        TextInput
+} from 'react-native-paper';
+import DropDownPicker from 'react-native-dropdown-picker';
 
 const ProductCreationScreen = ({ navigation }) => {
-    const [code, setCode] = useState('');
     const [description, setDescription] = useState('');
     const [price, setPrice] = useState(0);
 
+    const [open, setOpen] = useState(false);
+    const [value, setValue] = useState(null);
+    const [items, setItems] = useState([]);
+
+    navigation.addListener('focus', () => {
+        getData();
+    });
+
+    useEffect(() => {
+        getData();
+    }, []);
+
+    async function getData() {
+        const currentCategories = await getCategories();
+        const categoriesList = currentCategories.map(category => {
+            return { label: category.description, value: category.code }
+        });
+        setItems(categoriesList);
+    }
+
     const registerProduct = async () => {
-        await createProduct(description, price);
+        if (!isProductValid()) {
+            return;
+        }
+        await createProduct(description, price, value);
         Alert.alert('Produto cadastrado com sucesso!');
     };
 
-    const showProducts = async () => {
-        const products = await getProducts();
-        console.log(products);
-    }
+    const isProductValid = () => {
+        if (description.length == 0) {
+            Alert.alert('Descrição inválida.');
+            return false;
+        }
+
+        if (price <= 0) {
+            Alert.alert('Preço inválido.');
+            return false;
+        }
+
+        if (value === null || value === undefined) {
+            Alert.alert('Categoria inválida.');
+            return false;
+        }
+
+        return true;
+    };
 
     return (
         <View>
-            <Text>Código</Text>
             <TextInput
-                style={styles.defaultTextInput}
-                onChangeText={(code) => setCode(code)}
-                value={code}
-            />
-
-            <Text>Descrição</Text>
-            <TextInput
-                style={styles.defaultTextInput}
+                label="Descrição"
                 onChangeText={(description) => setDescription(description)}
                 value={description}
             />
 
-            <Text>Preço</Text>
             <TextInput
-                style={styles.defaultTextInput}
+                style={{marginBottom: 20}}
+                label="Preço"
                 onChangeText={(price) => setPrice(price)}
                 keyboardType="numeric"
                 value={price}
             />
 
-            <Button title="Cadastrar produto" onPress={() => registerProduct()} />
-            <Button title="Get produtos" onPress={() => showProducts()} />
+            <DropDownPicker
+                style={{marginBottom: 20}}
+                open={open}
+                value={value}
+                items={items}
+                setOpen={setOpen}
+                setValue={setValue}
+                setItems={setItems}
+            />
+
+            <Button mode="contained" onPress={() => registerProduct()}>
+                Salvar produto
+            </Button>
         </View>
     );
 }
