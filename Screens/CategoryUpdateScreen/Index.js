@@ -18,7 +18,7 @@ export const CategoryUpdateScreen = ({ route, navigation }) => {
         const { code, description } = route.params;
         setCode(code);
         setDescription(description);
-    }, []);
+    }, [route]);
 
     async function updateCategory() {
         await updateCategoryByCode({ code, description });
@@ -34,7 +34,7 @@ export const CategoryUpdateScreen = ({ route, navigation }) => {
                 value={description}
             />
 
-            <Button mode="contained" onPress={() => updateCategory()}>
+            <Button mode="contained" style={{marginTop: 20}} onPress={() => updateCategory()}>
                 Salvar categoria
             </Button>
         </View>

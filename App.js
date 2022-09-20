@@ -38,7 +38,7 @@ export default function App() {
       initialRouteName='ProductScreen'
       screenOptions={{
         tabBarLabelStyle: {
-          fontSize: 20
+          fontSize: 18
         }
       }}>
         <Tab.Screen name='ProductList'  component={ProductListScreen}

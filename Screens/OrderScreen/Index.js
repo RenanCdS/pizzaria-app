@@ -1,5 +1,5 @@
-import { ScrollView, View } from "react-native";
-import React, { useEffect, useState } from 'react';
+import { ScrollView, View, Alert } from "react-native";
+import React, { useState } from 'react';
 import { getProducts, getProductsByCategoryCode } from "../../services/ProductService";
 import { getCategories } from "../../services/CategoryService";
 import { 
@@ -18,16 +18,13 @@ export const OrderScreen = ({ navigation }) => {
     const [orderProducts, setOrderProducts] = useState([]);
 
     const [open, setOpen] = useState(false);
-    const [value, setValue] = useState(null);
-    const [items, setItems] = useState([]);
+    const [value, setValue] = useState(0);
+    const [items, setItems] = useState(['TODOS']);
 
     navigation.addListener('focus', () => {
         getData();
+        setValue(0);
     });
-
-    useEffect(() => {
-        getData();
-    }, []);
 
     async function getData() {
         const currentProducts = await getProducts();
@@ -71,6 +68,11 @@ export const OrderScreen = ({ navigation }) => {
     }
 
     function checkout() {
+        const hasAnyProduct = orderProducts.some(orderProduct => orderProduct.quantity > 0);
+        if (!hasAnyProduct) { 
+            Alert.alert('Por favor, selecione ao menos um produto.');
+            return;
+        }
         const productsWithQuantity = orderProducts.filter(product => product.quantity > 0);
 
         navigation.navigate('Checkout', {
@@ -109,7 +111,7 @@ export const OrderScreen = ({ navigation }) => {
                         </Card>
                     )
                 )}
-                <Button mode='contained' onPress={() => checkout()}>Comprar</Button>
+            <Button style={{marginBottom: 100}}  mode='contained' onPress={() => checkout()}>Fazer pedido</Button>
             </ScrollView>
         </View>
     );

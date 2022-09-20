@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
-import { Alert, Text } from 'react-native';
+import { useState } from "react";
+import { Alert } from 'react-native';
 import { Card, Title, Paragraph, Badge, Button } from 'react-native-paper';
 import { ScrollView } from "react-native-gesture-handler";
-import { createOrder, getOrders } from "../../services/OrderService";
+import { createOrder } from "../../services/OrderService";
 
 export const CheckoutScreen = ({route, navigation}) => {
 
@@ -14,11 +14,10 @@ export const CheckoutScreen = ({route, navigation}) => {
     });
 
     async function finishOrder() {
-        // await createOrder(orderProducts);
-        await getOrders();
-
+        await createOrder(orderProducts);
 
         Alert.alert('Pedido criado com sucesso!');
+        navigation.navigate('OrderList');
     }
 
     return (
@@ -27,19 +26,18 @@ export const CheckoutScreen = ({route, navigation}) => {
                         <Card style={{marginBottom: 20}} key={product.code}>
                             <Card.Content>
                                 <Title>{product.description}</Title>
-                                <Paragraph>Preço: R$ {product.price}</Paragraph>
+                                <Paragraph style={{fontWeight: 'bold'}}>Preço: R$ {product.price}</Paragraph>
                             </Card.Content>
                             <Card.Actions style={{ alignSelf: 'flex-end'}}>
                                 <Badge size={40}>{product.quantity}</Badge>
                             </Card.Actions>
-                        </Card>
-                    )
+                        </Card>)
                 )}
 
-            <Text>
+            <Title>
                 Total: R$ {orderProducts.reduce((p, c) => {
                             return p + c.quantity * Number(c.price);}, 0)}
-            </Text>
+            </Title>
 
             <Button mode="contained" onPress={() => finishOrder()}>Finalizar pedido</Button>
         </ScrollView>

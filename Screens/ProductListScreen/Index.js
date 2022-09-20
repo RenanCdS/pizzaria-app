@@ -16,12 +16,10 @@ const ProductListScreen = ({navigation}) => {
     const [products, setProducts] = useState([]);
 
     useEffect(() => {
-        getData();
+        return navigation.addListener('focus', () => {
+            getData();
+        });
     }, []);
-
-    navigation.addListener('focus', () => {
-        getData();
-    });
 
     async function getData() {
         const currentProducts = await getProducts();
@@ -49,7 +47,8 @@ const ProductListScreen = ({navigation}) => {
         navigation.navigate('ProductUpdate', { 
             code: product.code,
             description: product.description,
-            price: product.price
+            price: product.price,
+            category: product.category
         });
     }
 
@@ -59,7 +58,7 @@ const ProductListScreen = ({navigation}) => {
                         <Card style={{marginBottom: 20}} key={product.code}>
                             <Card.Content>
                                 <Title>{product.description}</Title>
-                                <Paragraph>{product.price}</Paragraph>
+                                <Paragraph>R$ {product.price}</Paragraph>
                             </Card.Content>
                             <Card.Actions style={{ alignSelf: 'flex-end'}}>
                                 <Button onPress={() => {
