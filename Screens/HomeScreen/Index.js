@@ -1,16 +1,18 @@
 import {
     View,
-    Text,
-    Button
+    Text
 } from 'react-native';
+
+import { Button } from 'react-native-paper';
 
 const HomeScreen = ({ navigation }) => {
 
     return (
-        <View>
+        <View style={{display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%'}}>
             <Text>
-                This is the HomeScreen
-                <Button onPress={() => navigation.navigate('ProductCreation')} title="Ir para página de criação" />
+                <Button mode='contained' onPress={() => navigation.navigate('ProductList')}>
+                    Entrar no App
+                </Button>
             </Text>
         </View>
     );

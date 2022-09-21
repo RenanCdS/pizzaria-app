@@ -3,6 +3,7 @@ import { Alert } from 'react-native';
 import { Card, Title, Paragraph, Badge, Button } from 'react-native-paper';
 import { ScrollView } from "react-native-gesture-handler";
 import { createOrder } from "../../services/OrderService";
+import styles from "../../styles";
 
 export const CheckoutScreen = ({route, navigation}) => {
 
@@ -21,7 +22,7 @@ export const CheckoutScreen = ({route, navigation}) => {
     }
 
     return (
-        <ScrollView>
+        <ScrollView style={styles.defaultScreen}>
             {orderProducts.map((product) => (
                         <Card style={{marginBottom: 20}} key={product.code}>
                             <Card.Content>

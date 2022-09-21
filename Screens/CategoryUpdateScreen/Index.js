@@ -8,6 +8,7 @@ import {
         Button,
         TextInput
 } from 'react-native-paper';
+import styles from '../../styles';
 
 
 export const CategoryUpdateScreen = ({ route, navigation }) => {
@@ -27,7 +28,7 @@ export const CategoryUpdateScreen = ({ route, navigation }) => {
     }
 
     return (
-        <View>
+        <View style={styles.defaultScreen}>
             <TextInput
                 label="Descrição"
                 onChangeText={(description) => setDescription(description)}

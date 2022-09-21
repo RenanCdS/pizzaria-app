@@ -4,6 +4,7 @@ import { Card, Title } from 'react-native-paper';
 import { Badge } from 'react-native-paper';
 import { styles } from './styles';
 import { getOrders } from '../../services/OrderService';
+import defaultStyles from '../../styles';
 
 export const OrderListScreen = ({ navigation }) => {
     const [orders, setOrders] = useState([]);
@@ -18,7 +19,7 @@ export const OrderListScreen = ({ navigation }) => {
     }
 
     return (
-        <ScrollView>
+        <ScrollView style={defaultStyles.defaultScreen}>
             {orders.map(order => (
                 <Card style={styles.cardStyle} key={order.code}>
                     <Card.Title title={'Pedido Nº ' + order.code} />

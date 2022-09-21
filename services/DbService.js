@@ -5,7 +5,7 @@ export function getDbConnection() {
     return connection;
 }
 
-export function createTables() {
+export async function createTables() {
     return new Promise((resolve, reject) => {
         const queryCategoryTable = `CREATE TABLE IF NOT EXISTS TB_CATEGORY
         (
@@ -43,15 +43,20 @@ export function createTables() {
             FOREIGN KEY(ORDER_ID) REFERENCES TB_ORDER(ORDER_ID)
         ); `;
 
-        const fullDatabaseCreationQuery = queryCategoryTable + queryProductTable + queryOrderTable 
-                                         + queryOrderProductTable;
-
         const dbConnection = getDbConnection();
 
-
-        dbConnection.transaction(transaction => {
-            transaction.executeSql(fullDatabaseCreationQuery, [],
-                (_) => { resolve(true) })
+        dbConnection.transaction((transaction) => {
+            // TODO: Refactor to not use callback hell
+            transaction.executeSql(queryCategoryTable, [], 
+                (_) => {
+                    transaction.executeSql(queryProductTable, [], (_) => {
+                        transaction.executeSql(queryOrderTable, [], (_) => {
+                            transaction.executeSql(queryOrderProductTable, [], (_) => {
+                                resolve(true);
+                            })
+                        })
+                    })
+                });
         }, error => {
             console.log(error);
             resolve(false);

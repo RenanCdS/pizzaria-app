@@ -1,12 +1,12 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { ScrollView, Alert} from 'react-native';
+import styles from '../../styles';
 import { 
     Card,
     Title,
     Paragraph,
     Button,
-    IconButton,
-    MD3Colors
+    IconButton
 } from 'react-native-paper';
 import { getProducts, removeProductByCode} from '../../services/ProductService';
 import { AntDesign } from "@expo/vector-icons";
@@ -15,11 +15,9 @@ const ProductListScreen = ({navigation}) => {
 
     const [products, setProducts] = useState([]);
 
-    useEffect(() => {
-        return navigation.addListener('focus', () => {
-            getData();
-        });
-    }, []);
+    navigation.addListener('focus', () => {
+        getData();
+    });
 
     async function getData() {
         const currentProducts = await getProducts();
@@ -53,9 +51,9 @@ const ProductListScreen = ({navigation}) => {
     }
 
     return (
-            <ScrollView>
+            <ScrollView style={styles.defaultScreen}>
                 {products.map((product) => (
-                        <Card style={{marginBottom: 20}} key={product.code}>
+                        <Card style={{marginTop: 10}} key={product.code}>
                             <Card.Content>
                                 <Title>{product.description}</Title>
                                 <Paragraph>R$ {product.price}</Paragraph>

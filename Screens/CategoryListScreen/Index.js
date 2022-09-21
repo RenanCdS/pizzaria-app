@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { ScrollView, Alert} from 'react-native';
 import { 
     Card,
@@ -9,6 +9,7 @@ import {
 import { AntDesign } from "@expo/vector-icons";
 import { useFocusEffect } from "@react-navigation/native"
 import { getCategories, removeCategoryByCode } from '../../services/CategoryService';
+import styles from '../../styles';
 
 const CategoryListScreen = ({navigation}) => {
     const [categories, setCategories] = useState([]);
@@ -46,9 +47,9 @@ const CategoryListScreen = ({navigation}) => {
           ]);
     }
     return (
-        <ScrollView>
+        <ScrollView style={styles.defaultScreen}>
             {categories.map((category) => (
-                    <Card style={{marginBottom: 20}} key={category.code}>
+                    <Card style={{marginTop: 10}} key={category.code}>
                         <Card.Content>
                             <Title>{category.description}</Title>
                         </Card.Content>

@@ -1,6 +1,8 @@
+// Renan Castro dos Santos 081180029 EC10
+// Wellison Sousa 081180040
+
 import { NavigationContainer } from '@react-navigation/native';
 import { useEffect } from 'react';
-import { View } from 'react-native';
 import {createTables} from './services/DbService';
 import ProductCreationScreen from './Screens/ProductCreationScreen/Index';
 import ProductListScreen from './Screens/ProductListScreen/Index';
@@ -9,37 +11,35 @@ import { OrderScreen } from './Screens/OrderScreen/Index';
 import CategoryCreationScreen from './Screens/CategoryCreationScreen/Index';
 import CategoryListScreen from './Screens/CategoryListScreen/Index';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-// import { getProducts } from './services/ProductService';
-import { getCategories } from './services/CategoryService';
-import { getProducts } from './services/ProductService';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { CategoryUpdateScreen } from './Screens/CategoryUpdateScreen/Index';
 import { CheckoutScreen } from './Screens/CheckoutScreen/Index';
 import { OrderListScreen } from './Screens/OrderListScreen/Index';
+import HomeScreen from './Screens/HomeScreen/Index';
 
 const Tab = createBottomTabNavigator();
 
 export default function App() {
 
   useEffect(() => {
-    createDatabase();
-    console.log('Successfully created database!');
+    async function createDatabase() {
+      await createTables();
+    }
+    createDatabase().then(() => {
+      console.log('Successfully created database!');
+    }).catch();
   }, []);
 
-  async function createDatabase() {
-    await createTables();
-  }
-  
   return (
-    // <View></View>
     <NavigationContainer>
       <Tab.Navigator 
-      initialRouteName='ProductScreen'
+      initialRouteName='Home'
       screenOptions={{
         tabBarLabelStyle: {
           fontSize: 18
         }
       }}>
+        
         <Tab.Screen name='ProductList'  component={ProductListScreen}
          options={{
           title: 'Produtos',
@@ -95,6 +95,12 @@ export default function App() {
           options={{
             title: 'Continuar pedido',
             tabBarItemStyle: { display: "none" },
+          }} />
+
+        <Tab.Screen name='Home' component={HomeScreen} 
+          options={{
+            tabBarItemStyle: { display: 'none' },
+            tabBarStyle: {display: 'none'}
           }} />
       </Tab.Navigator>
     </NavigationContainer>

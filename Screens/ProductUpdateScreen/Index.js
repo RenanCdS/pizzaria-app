@@ -10,6 +10,7 @@ import {
         TextInput
 } from 'react-native-paper';
 import DropDownPicker from 'react-native-dropdown-picker';
+import styles from '../../styles';
 
 const ProductUpdateScreen = ({route, navigation}) => {
 
@@ -56,7 +57,7 @@ const ProductUpdateScreen = ({route, navigation}) => {
         navigation.navigate('ProductList');
     }
     return (
-        <View>
+        <View style={styles.defaultScreen}>
             <TextInput
                 label="Descrição"
                 onChangeText={(description) => setDescription(description)}

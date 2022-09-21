@@ -10,6 +10,7 @@ import {
         TextInput
 } from 'react-native-paper';
 import DropDownPicker from 'react-native-dropdown-picker';
+import styles from '../../styles';
 
 const ProductCreationScreen = ({ navigation }) => {
     const [description, setDescription] = useState('');
@@ -18,8 +19,6 @@ const ProductCreationScreen = ({ navigation }) => {
     const [open, setOpen] = useState(false);
     const [value, setValue] = useState(0);
     const [items, setItems] = useState([]);
-
-    
 
     useEffect(() => {
         return navigation.addListener('focus', () => {
@@ -66,7 +65,7 @@ const ProductCreationScreen = ({ navigation }) => {
     };
 
     return (
-        <View>
+        <View style={styles.defaultScreen}>
             <TextInput
                 label="Descrição"
                 onChangeText={(description) => setDescription(description)}

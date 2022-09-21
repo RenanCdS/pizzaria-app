@@ -12,6 +12,7 @@ import {
 import DropDownPicker from 'react-native-dropdown-picker';
 
 import { AntDesign } from "@expo/vector-icons";
+import styles from "../../styles";
 
 export const OrderScreen = ({ navigation }) => {
 
@@ -27,13 +28,16 @@ export const OrderScreen = ({ navigation }) => {
     });
 
     async function getData() {
-        const currentProducts = await getProducts();
+        const promises = [getProducts(), getCategories()];
+        const values = await Promise.all(promises);
+        
+        const currentProducts = values[0];
         const currentOrderProducts = currentProducts.map(product => {
             product.quantity = 0;
             return product;
         });
         setOrderProducts(currentOrderProducts);
-        const currentCategories = await getCategories();
+        const currentCategories = values[1];
         const categoriesList = currentCategories.map(category => {
             return { label: category.description, value: category.code }
         });
@@ -81,8 +85,9 @@ export const OrderScreen = ({ navigation }) => {
     }
 
     return (
-        <View>
+        <View style={styles.defaultScreen}>
             <DropDownPicker
+                key={'dropdown'}
                 placeholder="Filtre por categoria"
                 style={{marginBottom: 20}}
                 open={open}

@@ -8,6 +8,7 @@ import {
         Button,
         TextInput
 } from 'react-native-paper';
+import styles from '../../styles';
 
 const CategoryCreationScreen = ({navigation}) => {
 
@@ -30,7 +31,7 @@ const CategoryCreationScreen = ({navigation}) => {
     };
 
     return (
-        <View>
+        <View style={styles.defaultScreen}>
             <TextInput
                 style={{marginBottom: 20}}
                 label="Descrição"
