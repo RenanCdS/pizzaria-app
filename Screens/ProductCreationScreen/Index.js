@@ -16,15 +16,18 @@ const ProductCreationScreen = ({ navigation }) => {
     const [price, setPrice] = useState(0);
 
     const [open, setOpen] = useState(false);
-    const [value, setValue] = useState(null);
+    const [value, setValue] = useState(0);
     const [items, setItems] = useState([]);
 
-    navigation.addListener('focus', () => {
-        getData();
-    });
+    
 
     useEffect(() => {
-        getData();
+        return navigation.addListener('focus', () => {
+            getData();
+            setValue(null);
+            setDescription('');
+            setPrice(0);
+        });
     }, []);
 
     async function getData() {
@@ -54,7 +57,7 @@ const ProductCreationScreen = ({ navigation }) => {
             return false;
         }
 
-        if (value === null || value === undefined) {
+        if (value === null || value === undefined || value === 0) {
             Alert.alert('Categoria inválida.');
             return false;
         }

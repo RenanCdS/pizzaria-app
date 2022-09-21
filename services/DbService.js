@@ -10,7 +10,8 @@ export function createTables() {
         const queryCategoryTable = `CREATE TABLE IF NOT EXISTS TB_CATEGORY
         (
             CATEGORY_ID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-            DESCRIPTION TEXT NOT NULL
+            DESCRIPTION TEXT NOT NULL,
+            ACTIVE INTEGER NOT NULL DEFAULT 1
         ); `;
         
         const queryProductTable = `CREATE TABLE IF NOT EXISTS TB_PRODUCT
@@ -19,6 +20,7 @@ export function createTables() {
             DESCRIPTION TEXT NOT NULL,
             CATEGORY_ID INTEGER NOT NULL,
             PRICE TEXT NOT NULL,
+            ACTIVE INTEGER NOT NULL DEFAULT 1,
             FOREIGN KEY(CATEGORY_ID) REFERENCES TB_CATEGORY(CATEGORY_ID)
         ); `;
 
@@ -26,7 +28,8 @@ export function createTables() {
         (
             ORDER_ID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
             ORDER_DATE DATE NOT NULL,
-            STATUS TEXT NOT NULL
+            STATUS TEXT NOT NULL,
+            ACTIVE INTEGER NOT NULL DEFAULT 1
         ); `;
 
         const queryOrderProductTable = `CREATE TABLE IF NOT EXISTS TB_ORDER_PRODUCT
@@ -35,6 +38,7 @@ export function createTables() {
             QUANTITY INTEGER NOT NULL,
             PRODUCT_ID INTEGER NOT NULL,
             ORDER_ID INTEGER NOT NULL,
+            ACTIVE INTEGER NOT NULL DEFAULT 1,
             FOREIGN KEY(PRODUCT_ID) REFERENCES TB_PRODUCT(PRODUCT_ID),
             FOREIGN KEY(ORDER_ID) REFERENCES TB_ORDER(ORDER_ID)
         ); `;
@@ -43,6 +47,7 @@ export function createTables() {
                                          + queryOrderProductTable;
 
         const dbConnection = getDbConnection();
+
 
         dbConnection.transaction(transaction => {
             transaction.executeSql(fullDatabaseCreationQuery, [],

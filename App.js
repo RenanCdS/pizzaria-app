@@ -28,11 +28,10 @@ export default function App() {
 
   async function createDatabase() {
     await createTables();
-
-    const categories = await getProducts();
   }
   
   return (
+    // <View></View>
     <NavigationContainer>
       <Tab.Navigator 
       initialRouteName='ProductScreen'

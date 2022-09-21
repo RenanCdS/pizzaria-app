@@ -20,7 +20,7 @@ export async function createCategory(description) {
 
 export async function getCategories() {
     return new Promise((resolve, reject) => {
-        const query = `SELECT * FROM TB_CATEGORY; `;
+        const query = `SELECT * FROM TB_CATEGORY WHERE ACTIVE = 1; `;
         const connection = getDbConnection();
 
         connection.transaction(transaction => {
@@ -45,13 +45,17 @@ export async function getCategories() {
 
 export async function removeCategoryByCode(code) {
     return new Promise((resolve, reject) => {
-        const query = `DELETE FROM TB_CATEGORY WHERE CATEGORY_ID = ?;`;
+        const query = `UPDATE TB_CATEGORY SET ACTIVE = 0 WHERE CATEGORY_ID = ?;`;
+        const queryProducts = `UPDATE TB_PRODUCT SET ACTIVE = 0 WHERE CATEGORY_ID = ?;`;
         const connection = getDbConnection();
 
         connection.transaction(transaction => {
             transaction.executeSql(query, [code],
                 (_) => {
-                    resolve(true);
+                    transaction.executeSql(queryProducts, [code],
+                        (_) => {
+                            resolve(true);
+                        });
                 });
         }, error => {
             console.log(error);

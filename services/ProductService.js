@@ -21,7 +21,7 @@ export async function createProduct(description, price, categoryCode) {
 
 export async function getProducts() {
     return new Promise((resolve, reject) => {
-        const query = `SELECT * FROM TB_PRODUCT; `;
+        const query = `SELECT * FROM TB_PRODUCT WHERE ACTIVE = 1; `;
         const connection = getDbConnection();
 
         connection.transaction(transaction => {
@@ -48,7 +48,7 @@ export async function getProducts() {
 
 export async function getProductsByCategoryCode(categoryCode) {
     return new Promise((resolve, reject) => {
-        const query = `SELECT * FROM TB_PRODUCT WHERE CATEGORY_ID = ?; `;
+        const query = `SELECT * FROM TB_PRODUCT WHERE CATEGORY_ID = ? AND ACTIVE = 1; `;
         const connection = getDbConnection();
 
         connection.transaction(transaction => {
@@ -74,7 +74,7 @@ export async function getProductsByCategoryCode(categoryCode) {
 
 export async function removeProductByCode(code) {
     return new Promise((resolve, reject) => {
-        const query = `DELETE FROM TB_PRODUCT WHERE PRODUCT_ID = ?;`;
+        const query = `UPDATE TB_PRODUCT SET ACTIVE = 0 WHERE PRODUCT_ID = ?;`;
         const connection = getDbConnection();
 
         connection.transaction(transaction => {
